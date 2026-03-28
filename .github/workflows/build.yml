@@ -1,0 +1,45 @@
+name: Build Android APK
+
+# This triggers the build when you push to main, 
+# or you can trigger it manually from the Actions tab.
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '17' # Java 17 is required for modern Android/Flutter builds
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
+
+      - name: Auto-Generate Android Boilerplate
+        # This is the magic command! It generates all the missing Android 
+        # folders so you don't have to create them manually on mobile.
+        run: flutter create --platforms=android --org com.studio.brushdraw .
+
+      - name: Install Dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: BrushDraw-App-Release
+          path: build/app/outputs/flutter-apk/app-release.apk
