@@ -1,0 +1,19 @@
+name: brush_draw
+description: A powerful procedural brush drawing app.
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  # Up-to-date SDK constraint for 2024-2026
+  sdk: '>=3.2.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  # Required for the state management
+  provider: ^6.1.2
+  # Required for saving the image
+  path_provider: ^2.1.2
+
+flutter:
+  uses-material-design: true
